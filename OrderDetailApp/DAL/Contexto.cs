@@ -15,7 +15,7 @@ namespace OrderDetailApp.DAL
 
         protected override void OnConfiguring(DbContextOptionsBuilder dbContext)
         {
-            dbContext.UseSqlite(@"Data Source = DATA\Orders.db");
+            dbContext.UseSqlite(@"Data Source = C:\Users\olive\Datos de proyectos\Pedidos.db");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

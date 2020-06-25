@@ -18,7 +18,7 @@ namespace OrderDetailApp.Models
         public int SuplidorId { get; set; }
         public double Monto { get; set; }
         [ForeignKey("OrderId")]
-        public virtual List<OrdenesDetalle> OrderDetail { get; set; }
+        public virtual List<OrdenesDetalle> OrderDetail { get; set; } = new List<OrdenesDetalle>();
 
         public Ordenes()
         {

@@ -9,8 +9,8 @@ using OrderDetailApp.DAL;
 namespace OrderDetailApp.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20200625025443_Migracion inicial")]
-    partial class Migracioninicial
+    [Migration("20200625144129_Migracion Inicial")]
+    partial class MigracionInicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

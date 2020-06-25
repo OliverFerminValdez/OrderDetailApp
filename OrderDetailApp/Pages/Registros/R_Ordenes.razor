@@ -48,7 +48,7 @@
                     <div class="form-row">
                         <div class="form-group col">
                             <label><strong>Producto: </strong></label>
-                            <select class="form-control">
+                            <select class="form-control" @bind="ProductoId" @onfocusout="PullData">
                                 @foreach (var item in ProductosBLL.GetProductos())
                                 {
                                     <option value="@item.ProductoId">@item.Descripcion</option>
@@ -59,7 +59,7 @@
                         <div class="form-group col">
                             <label><strong>Cantidad:</strong></label>
                             <div class="input-group">
-                                <InputNumber @bind-Value="Cantidad" class="form-control" />
+                                <InputNumber @bind-Value="Cantidad" class="form-control" @onfocusout="calcularImporte"/>
                             </div>
                         </div>
 
@@ -75,7 +75,7 @@
                             <div class="input-group">
                                 <InputNumber @bind-Value="Importe" class="form-control" />
                                 <div class="input-group-append">
-                                    <button type="button" class="btn btn-primary">+</button>
+                                    <button type="button" class="btn btn-secondary" @onclick="AgregarAlDetalle"><span class="oi oi-plus"></span></button>
                                 </div>
                             </div>
                         </div>
@@ -93,16 +93,28 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
+                            @foreach (var item in Ordenes.OrderDetail)
+                            {
+                                <tr>
+                                    <td>@ProductosBLL.Buscar(item.ProductoId).Descripcion</td>
+                                    <td>@item.Cantidad</td>
+                                    <td>@ProductosBLL.Buscar(item.ProductoId).Costo</td>
+                                    <td>@(item.Cantidad*ProductosBLL.Buscar(item.ProductoId).Costo)</td>
+                                </tr>
+                            }
+
                         </tbody>
                     </table>
                 </div>
+                <div class="card-footer" style="background-color:aquamarine">
+                    <div class="form-group">
+                        <div class="col-4">
+                            <button type="button" class="btn btn-secondary" @onclick="RemoverFila">Remover articulo</button>
+                        </div>
+                    </div>
+                </div>
             </div>
+
             <br />
             <div class="form-group">
                 <label>Monto: </label>
@@ -112,9 +124,9 @@
         </div>
         <div class="card-footer" style="background-color:aquamarine">
             <div class="form-group text-center" display: inline-block>
-                <button type="button" class="btn btn-lg btn-primary" @onclick="Nuevo">Nuevo</button>
-                <button type="submit" class="btn btn-lg btn-success">Guardar</button>
-                <button type="button" class="btn btn-lg btn-danger" @onclick="Eliminar">Eliminar</button>
+                <button type="button" class="btn btn-lg btn-primary" @onclick="Nuevo"><span class="oi oi-file"></span> Nuevo</button>
+                <button type="submit" class="btn btn-lg btn-success"><span class="oi oi-check"></span> Guardar</button>
+                <button type="button" class="btn btn-lg btn-danger" @onclick="Eliminar"><span class="oi oi-circle-x"></span> Eliminar</button>
             </div>
         </div>
     </div>
@@ -131,19 +143,26 @@
     public double Cantidad { get; set; }
     public double Costo { get; set; }
     public double Importe { get; set; }
+    public double Monto { get; set; }
 
     protected override void OnInitialized()
     {
         Nuevo();
         Buscar();
+        CalcularMonto();
     }
 
     public void Nuevo()
     {
+        ProductoId = 0;
+        Cantidad = 0;
+        Costo = 0;
+        Importe = 0;
         Ordenes = new Ordenes();
     }
     public void Buscar()
     {
+
         if (Ordenes.OrderId > 0)
         {
             var encontrado = OrdenesBLL.Buscar(Ordenes.OrderId);
@@ -152,18 +171,20 @@
                 this.Ordenes = encontrado;
 
         }
+        CalcularMonto();
     }
     public void AgregarAlDetalle()
     {
         Ordenes.OrderDetail.Add(new OrdenesDetalle
         {
-            ProductoId = 1,
-            OrderId = 1,
-            Cantidad = 1.0,
-            Costo = 1.0,
+            ProductoId = ProductoId,
+            OrderId = Ordenes.OrderId,
+            Cantidad = Cantidad,
+            Costo = Costo,
         }
 
         );
+        CalcularMonto();
     }
     public void Guardar()
     {
@@ -191,7 +212,32 @@
             Nuevo();
         }
     }
-    public void CalcularBalance()
+    public void PullData()
     {
+        if (ProductoId != 0)
+        {
+            Costo = ProductosBLL.Buscar(ProductoId).Costo;
+        }
+    }
+    public void calcularImporte()
+    {
+        Importe = Costo * Cantidad;
+    }
+    public void CalcularMonto()
+    {
+        Ordenes.Monto = 0;
+        foreach (var item in Ordenes.OrderDetail)
+        {
+            Ordenes.Monto += ProductosBLL.Buscar(item.ProductoId).Costo * item.Cantidad;
+        }
+    }
+    public void RemoverFila()
+    {
+        if(Ordenes.OrderDetail.Count-1 >= 0)
+        {
+            int itemARemover = Ordenes.OrderDetail.Count - 1;
+            Ordenes.OrderDetail.RemoveAt(itemARemover);
+        }
+        CalcularMonto();
     }
 }

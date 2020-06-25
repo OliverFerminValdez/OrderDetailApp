@@ -9,6 +9,25 @@ namespace OrderDetailApp.BLL
 {
     public class ProductosBLL
     {
+        public static Productos Buscar(int id)
+        {
+            Contexto db = new Contexto();
+            Productos p = new Productos();
+            try
+            {
+                p = db.Productos.Find(id);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                db.Dispose();
+            }
+            return p;
+        }
         public static List<Productos> GetProductos()
         {
             Contexto contexto = new Contexto();

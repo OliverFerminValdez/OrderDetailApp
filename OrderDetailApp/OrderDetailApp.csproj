@@ -6,6 +6,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Data\WeatherForecast.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Data\Orders.db" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Data\WeatherForecast.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SQLite" Version="3.1.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5">
       <PrivateAssets>all</PrivateAssets>
@@ -15,6 +29,16 @@
 
   <ItemGroup>
     <Folder Include="Pages\Consultas\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Data\Orders.db" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Data\Pedidos.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

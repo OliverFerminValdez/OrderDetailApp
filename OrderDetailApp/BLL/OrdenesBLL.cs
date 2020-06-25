@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using OrderDetailApp.DAL;
 using OrderDetailApp.Models;
 using System;
@@ -49,13 +51,12 @@ namespace OrderDetailApp.BLL
 
             try
             {
-                if (ordenes.OrderDetail.Count > 0)
+                if (ordenes.OrderDetail.Count >= 0)
                 {
                     contexto.Database.ExecuteSqlRaw($"Delete FROM OrdenesDetalle Where OrderId = {ordenes.OrderId}");
-
                     foreach (var item in ordenes.OrderDetail)
                     {
-                        contexto.Entry(item).State = EntityState.Added;
+                        contexto.Database.ExecuteSqlRaw($"INSERT INTO OrdenesDetalle (ProductoId,OrderId,Cantidad,Costo) values({item.ProductoId},{ordenes.OrderId},{item.Cantidad},{item.Costo})");
                     }
                 }
                 else
