@@ -16,13 +16,16 @@ namespace OrderDetailApp.Models
         public double Cantidad { get; set; }
         public double Costo { get; set; }
 
-        public OrdenesDetalle(int id, int productoId, int orderId, double cantidad, double costo)
+        public OrdenesDetalle(int productoId, int orderId, double cantidad, double costo)
         {
-            Id = id;
             ProductoId = productoId;
             OrderId = orderId;
             Cantidad = cantidad;
             Costo = costo;
+        }
+        public OrdenesDetalle()
+        {
+
         }
     }
 }
