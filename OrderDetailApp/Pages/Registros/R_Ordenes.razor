@@ -67,7 +67,7 @@
                         <div class="form-group col">
                             <label><strong>Costo:</strong></label>
                             <div class="input-group">
-                                <InputNumber @bind-Value="Costo" class="form-control" />
+                                <InputNumber @bind-Value="Costo" class="form-control"  readonly/>
                             </div>
                         </div>
 
@@ -101,6 +101,7 @@
                                     <td>@item.Cantidad</td>
                                     <td>@ProductosBLL.Buscar(item.ProductoId).Costo</td>
                                     <td>@(item.Cantidad*ProductosBLL.Buscar(item.ProductoId).Costo)</td>
+                                    <td><button type="button" class="btn btn-danger" @onclick="(()=>EliminarItem(item))"><span class="oi oi-x"></span></button></td>
                                 </tr>
                             }
 
@@ -145,12 +146,12 @@
     public double Costo { get; set; }
     public double Importe { get; set; }
     public double Monto { get; set; }
+    public bool Eliminado { get; set; } = false;
 
     protected override void OnInitialized()
     {
         Nuevo();
         Buscar();
-        CalcularMonto();
     }
 
     public void Nuevo()
@@ -170,12 +171,10 @@
 
             if (encontrado != null)
                 this.Ordenes = encontrado;
+            else
+                toast.ShowError("No encontrado");
+        }
 
-        }
-        else
-        {
-            toast.ShowError("No encontrado");
-        }
         CalcularMonto();
     }
     public void AgregarAlDetalle()
@@ -250,6 +249,11 @@
             int itemARemover = Ordenes.OrderDetail.Count - 1;
             Ordenes.OrderDetail.RemoveAt(itemARemover);
         }
+        CalcularMonto();
+    }
+    public void EliminarItem(OrdenesDetalle ordenes)
+    {
+        Ordenes.OrderDetail.Remove(ordenes);
         CalcularMonto();
     }
 }

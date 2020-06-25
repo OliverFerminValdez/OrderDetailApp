@@ -12,8 +12,8 @@ namespace OrderDetailApp.Models
     {
         [Key]
         public int OrderId { get; set; }
-        [Required(ErrorMessage ="El campo fecha es obligatorio")]
-        public DateTime Fecha { get; set; }
+        [Required(ErrorMessage = "El campo fecha es obligatorio")]
+        public DateTime Fecha { get; set; } = DateTime.Now;
         [Required(ErrorMessage ="Es obligatorio asignar un suplidor")]
         public int SuplidorId { get; set; }
         public double Monto { get; set; }
