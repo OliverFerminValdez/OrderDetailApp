@@ -3,6 +3,7 @@
 
 @using Models
 @using BLL
+@inject IToastService toast
 
 <EditForm Model="Ordenes" OnValidSubmit="Guardar">
     <DataAnnotationsValidator/>
@@ -171,6 +172,10 @@
                 this.Ordenes = encontrado;
 
         }
+        else
+        {
+            toast.ShowError("No encontrado");
+        }
         CalcularMonto();
     }
     public void AgregarAlDetalle()
@@ -195,9 +200,11 @@
         if (guardo)
         {
             Nuevo();
+            toast.ShowSuccess("Guardado exitosamente");
         }
         else
         {
+            toast.ShowError("No se pudo guardar");
             Nuevo();
         }
     }
@@ -210,6 +217,11 @@
         if (elimino)
         {
             Nuevo();
+            toast.ShowSuccess("Eliminado exitosamente");
+        }
+        else
+        {
+            toast.ShowError("No se pudo eliminar");
         }
     }
     public void PullData()

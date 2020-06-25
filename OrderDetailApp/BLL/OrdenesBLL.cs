@@ -21,7 +21,7 @@ namespace OrderDetailApp.BLL
                 return Modificar(ordenes);
         }
 
-        private static bool Insertar(Ordenes ordenes)
+        public static bool Insertar(Ordenes ordenes)
         {
             bool paso = false;
             Contexto contexto = new Contexto();
@@ -51,7 +51,7 @@ namespace OrderDetailApp.BLL
 
             try
             {
-                if (ordenes.OrderDetail.Count >= 0)
+                if (ordenes.OrderDetail.Count > 0)
                 {
                     contexto.Database.ExecuteSqlRaw($"Delete FROM OrdenesDetalle Where OrderId = {ordenes.OrderId}");
                     foreach (var item in ordenes.OrderDetail)
