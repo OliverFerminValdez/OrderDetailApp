@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DAL\" />
     <Folder Include="Pages\Consultas\" />
     <Folder Include="Pages\Registros\" />
   </ItemGroup>
