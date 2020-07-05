@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace OrderDetailApp.Models
 {
     public class Suplidores
     {
+
         [Key]
         public int SuplidorId { get; set; }
-        [Required(ErrorMessage ="Se requiere el nombre del suplidor")]
+        [Required(ErrorMessage = "Se requiere el nombre del suplidor")]
         public string Nombre { get; set; }
 
         public Suplidores()
@@ -25,5 +24,5 @@ namespace OrderDetailApp.Models
             Nombre = nombre;
         }
     }
-
 }
+

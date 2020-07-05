@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 
 namespace OrderDetailApp.Models
@@ -14,7 +13,7 @@ namespace OrderDetailApp.Models
         public int OrderId { get; set; }
         [Required(ErrorMessage = "El campo fecha es obligatorio")]
         public DateTime Fecha { get; set; } = DateTime.Now;
-        [Required(ErrorMessage ="Es obligatorio asignar un suplidor")]
+        [Required(ErrorMessage = "Es obligatorio asignar un suplidor")]
         public int SuplidorId { get; set; }
         public double Monto { get; set; }
         [ForeignKey("OrderId")]

@@ -1,5 +1,122 @@
-﻿<h3>R_Productos</h3>
+﻿@page "/Productos"
+
+@using Models
+@using BLL
+@inject IToastService toast
+
+<EditForm Model="Productos" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <div class="card">
+        <div class="card-header" style="background-color:lightgreen">
+            <h3><strong>Registro de articulos</strong></h3>
+        </div>
+        <div class="card-body">
+            <form>
+                @*ArticuloId*@
+                <div class="form-row align-items-center">
+                    <div class="col">
+                        <div class="form-group">
+                            <label><strong>Articulo Id</strong></label>
+                            <div class="input-group">
+                                <InputNumber @bind-Value="Productos.ProductoId" class="form-control col-4" />
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-primary input-group-text" @onclick="Buscar">Buscar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @*Descripcion*@
+                <div class="form-group">
+                    <label><strong>Descripcion</strong></label>
+                    <InputText @bind-Value="Productos.Descripcion" class="form-control" />
+                    <ValidationMessage For="@(() => Productos.Descripcion)" />
+                </div>
+                @*Existencia*@
+                <div class="form-group">
+                    <label><strong>Existencia</strong></label>
+                    <InputNumber @bind-Value="Productos.Inventario" class="form-control" @onfocusout="CalcularValorInv" />
+                    <ValidationMessage For="@(() => Productos.Inventario)" />
+                </div>
+                @*Costo*@
+                <div class="form-group">
+                    <label><strong>Costo</strong></label>
+                    <InputNumber @bind-Value="Productos.Costo" class="form-control" @onfocusout="CalcularValorInv" />
+                    <ValidationMessage For="@(() => Productos.Costo)" />
+                </div>
+            </form>
+        </div>
+
+        <div class="card-footer" style="background-color:lightgreen">
+            <div class="form-group text-center" display: Inline-block>
+                <button type="button" class="btn btn-lg btn-primary" @onclick="Nuevo">Nuevo</button>
+                <button type="submit" class="btn btn-lg btn-success">Guardar</button>
+                <button type="button" class="btn btn-lg btn-danger" @onclick="Eliminar">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+</EditForm>
+
 
 @code {
+    [Parameter]
+    public int ProductoId { get; set; }
 
+    private Productos Productos = new Productos();
+
+    protected override void OnInitialized()
+    {
+        Nuevo();
+        Buscar();
+    }
+    public void Nuevo()
+    {
+        Productos = new Productos();
+    }
+    public void Buscar()
+    {
+        if (Productos.ProductoId > 0)
+        {
+            var encontrado = ProductosBLL.Buscar(Productos.ProductoId);
+
+            if (encontrado != null)
+                this.Productos = encontrado;
+            else
+                toast.ShowWarning("No encontrado");
+        }
+    }
+    public void Guardar()
+    {
+        bool guardo = ProductosBLL.Guardar(Productos);
+
+        if (guardo)
+        {
+            Nuevo();
+            toast.ShowSuccess("Guardado exitosamente");
+        }
+        else
+        {
+            toast.ShowError("No se pudo guardar");
+        }
+
+    }
+    public void Eliminar()
+    {
+        bool elimino = ProductosBLL.Eliminar(Productos.ProductoId);
+
+        if (elimino)
+        {
+            Nuevo();
+            toast.ShowSuccess("Eliminado exitosamente");
+        }
+        else
+        {
+            toast.ShowError("No se pudo eliminar");
+        }
+    }
+    public void CalcularValorInv()
+    {
+
+    }
 }

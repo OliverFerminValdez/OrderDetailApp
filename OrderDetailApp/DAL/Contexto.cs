@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OrderDetailApp.Models;
+using OrderDetailApp.Pages.Registros;
 using System;
 using System.Collections.Generic;
 using System.Linq;

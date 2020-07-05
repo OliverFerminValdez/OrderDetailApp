@@ -4,6 +4,7 @@
 @using Models
 @using BLL
 @inject IToastService toast
+@inject IModalService modal
 
 <EditForm Model="Ordenes" OnValidSubmit="Guardar">
     <DataAnnotationsValidator/>
@@ -47,15 +48,17 @@
             <div class="card">
                 <div class="card-header" style="background-color:aquamarine">
                     <div class="form-row">
-                        <div class="form-group col">
-                            <label><strong>Producto: </strong></label>
-                            <select class="form-control" @bind="ProductoId" @onfocusout="PullData">
-                                @foreach (var item in ProductosBLL.GetProductos())
-                                {
-                                    <option value="@item.ProductoId">@item.Descripcion</option>
-                                }
-                            </select>
-                        </div>
+                            <div class="form-group col">
+                                <label><strong>Producto: </strong></label>
+                                <select class="form-control" @bind="ProductoId" @onfocusout="PullData">
+                                    @foreach (var item in ProductosBLL.GetProductos())
+                                    {
+                                        <option value="@item.ProductoId">@item.Descripcion</option>
+                                    }
+                                </select>
+                            </div>
+
+                        
 
                         <div class="form-group col">
                             <label><strong>Cantidad:</strong></label>
@@ -74,7 +77,7 @@
                         <div class="form-group col">
                             <label><strong>Importe: </strong></label>
                             <div class="input-group">
-                                <InputNumber @bind-Value="Importe" class="form-control" />
+                                <InputNumber @bind-Value="Importe" class="form-control" readonly/>
                                 <div class="input-group-append">
                                     <button type="button" class="btn btn-secondary" @onclick="AgregarAlDetalle"><span class="oi oi-plus"></span></button>
                                 </div>
@@ -101,7 +104,7 @@
                                     <td>@item.Cantidad</td>
                                     <td>@ProductosBLL.Buscar(item.ProductoId).Costo</td>
                                     <td>@(item.Cantidad*ProductosBLL.Buscar(item.ProductoId).Costo)</td>
-                                    <td><button type="button" class="btn btn-danger" @onclick="(()=>EliminarItem(item))"><span class="oi oi-x"></span></button></td>
+                                    <td><button type="button" class="btn btn-danger" @onclick="@(()=>EliminarItem(item))"><span class="oi oi-x"></span></button></td>
                                 </tr>
                             }
 
@@ -203,7 +206,6 @@
         }
         else
         {
-            toast.ShowError("No se pudo guardar");
             Nuevo();
         }
     }
@@ -255,5 +257,10 @@
     {
         Ordenes.OrderDetail.Remove(ordenes);
         CalcularMonto();
+    }
+    public void EntrarProducto()
+    {
+        modal.Show<R_Productos>();
+
     }
 }

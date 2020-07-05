@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Security.Permissions;
 using System.Threading.Tasks;
 
 namespace OrderDetailApp.Models
@@ -11,9 +10,9 @@ namespace OrderDetailApp.Models
     {
         [Key]
         public int ProductoId { get; set; }
-        [Required(ErrorMessage ="La descripcion del producto es obligatoria")]
+        [Required(ErrorMessage = "La descripcion del producto es obligatoria")]
         public string Descripcion { get; set; }
-        [Range(minimum:1,maximum:1000000,ErrorMessage ="Eliga un rango de 1 a 1000000")]
+        [Range(minimum: 1, maximum: 1000000, ErrorMessage = "Eliga un rango de 1 a 1000000")]
         public double Costo { get; set; }
         [Range(minimum: 1, maximum: 1000000, ErrorMessage = "Eliga un rango de 1 a 1000000")]
         public double Inventario { get; set; }

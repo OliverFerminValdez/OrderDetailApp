@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using OrderDetailApp.DAL;
@@ -48,23 +49,34 @@ namespace OrderDetailApp.BLL
         {
             bool paso = false;
             Contexto contexto = new Contexto();
+            var anterior = Buscar(ordenes.OrderId);
 
             try
             {
-                if (ordenes.OrderDetail.Count > 0)
+                
+                foreach (var item in anterior.OrderDetail)
                 {
-                    contexto.Database.ExecuteSqlRaw($"Delete FROM OrdenesDetalle Where OrderId = {ordenes.OrderId}");
-                    foreach (var item in ordenes.OrderDetail)
+                    if(!ordenes.OrderDetail.Exists(o => o.Id == item.Id))
                     {
-                        contexto.Database.ExecuteSqlRaw($"INSERT INTO OrdenesDetalle (ProductoId,OrderId,Cantidad,Costo) values({item.ProductoId},{ordenes.OrderId},{item.Cantidad},{item.Costo})");
+                         contexto.Entry(item).State = EntityState.Deleted;
+                    }
+                    
+                }
+
+                foreach (var item in ordenes.OrderDetail)
+                {
+                    if(item.Id == 0)
+                    {
+                        contexto.Entry(item).State = EntityState.Added;
+                    }
+                    else
+                    {
+                        contexto.Entry(item).State = EntityState.Modified;
                     }
                 }
-                else
-                {
+                contexto.Entry(ordenes).State = EntityState.Modified;
+                paso = contexto.SaveChanges() > 0;
 
-                    contexto.Entry(ordenes).State = EntityState.Modified;
-                    paso = contexto.SaveChanges() > 0;
-                }
             }
             catch (Exception)
             {
